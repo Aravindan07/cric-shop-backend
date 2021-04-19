@@ -7,6 +7,7 @@ const connectDB = require("./db/db.connection");
 const products = require("./routes/products.router");
 const wishList = require("./routes/wishlist.router");
 const cartList = require("./routes/cartlist.router");
+const categoryList = require("./routes/categories.router");
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +17,7 @@ connectDB();
 app.use("/api/v1/products", products);
 app.use("/api/v1/wishlist", wishList);
 app.use("/api/v1/cartlist", cartList);
+app.use("/api/v1/categories", categoryList);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>

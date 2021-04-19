@@ -12,6 +12,7 @@ const productSchema = new Schema({
 	inStock: { type: Boolean },
 	cartListed: { type: Boolean, default: false },
 	wishListed: { type: Boolean, default: false },
+	category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
 
 module.exports = mongoose.model("Product", productSchema);
