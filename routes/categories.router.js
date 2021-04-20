@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 router.get("/", (req, res) => {
 	Category.find({})
 		.populate("products")
+		.select("-__v")
 		.then((data) => {
 			res.json({ categories: data });
 		})
@@ -21,10 +22,11 @@ router.post("/", (req, res) => {
 	newCategory
 		.save()
 		.then((data) => {
-			res.json({ category: data });
+			res.status(201).json({ category: data });
 		})
 		.catch((error) => {
 			console.error(error);
+			res.status(400).json({ message: "Validation Failed" });
 		});
 });
 

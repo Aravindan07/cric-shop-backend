@@ -10,23 +10,29 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-	const sentData = req.body;
+	const receivedData = req.body;
 	const newProduct = new Product({
-		name: sentData.name,
-		price: sentData.price,
-		image: sentData.image,
-		description: sentData.description,
-		ratings: sentData.ratings,
-		delivery: sentData.delivery,
-		offer: sentData.offer,
-		inStock: sentData.inStock,
+		brand: receivedData.brand,
+		name: receivedData.name,
+		modelNo: receivedData.modelNo,
+		price: receivedData.price,
+		imageUrl: receivedData.imageUrl,
+		description: receivedData.description,
+		ratings: receivedData.ratings,
+		delivery: receivedData.delivery,
+		offer: receivedData.offer,
+		inStock: receivedData.inStock,
+		category: receivedData.category,
 	});
 	newProduct
 		.save()
 		.then((result) => {
-			res.json({ product: result });
+			res.status(201).json({ product: result });
 		})
-		.catch(() => res.status(403).json({ message: "You made some error XD" }));
+		.catch((error) => {
+			console.error(error);
+			res.status(400).json({ message: "Validation Failed!" });
+		});
 });
 
 module.exports = router;
