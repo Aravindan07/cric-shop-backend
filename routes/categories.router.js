@@ -34,6 +34,7 @@ router.get("/:categoryId", (req, res) => {
 	const { categoryId } = req.params;
 	Category.findById({ _id: categoryId })
 		.populate("products")
+		.select("-__v")
 		.exec()
 		.then((data) => {
 			res.json({ data: data });
