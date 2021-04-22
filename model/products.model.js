@@ -21,6 +21,7 @@ const productSchema = new Schema(
 		cartListed: { type: Boolean, default: false },
 		wishListed: { type: Boolean, default: false },
 		category: { type: Schema.Types.ObjectId, ref: "Category" },
+		quantityAddedToCart: { type: Number, default: 0 },
 	},
 	{ timestamps: true }
 );

@@ -16,6 +16,7 @@ router.post("/:productId", async (req, res) => {
 	const update = {
 		$set: {
 			cartListed: !foundProduct.cartListed,
+			quantityAddedToCart: 1,
 		},
 	};
 	const options = { new: true };
