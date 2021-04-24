@@ -24,9 +24,12 @@ router.post("/:productId", async (req, res) => {
 		.select("-__v")
 		.then((updatedDocument) => {
 			if (updatedDocument) {
-				return res
-					.status(201)
-					.json({ message: "Product Added to Wishlist", item: updatedDocument });
+				return res.status(201).json({
+					message: foundProduct.wishListed
+						? "Product Removed from Wishlist"
+						: "Product Added to Wishlist",
+					item: updatedDocument,
+				});
 			} else {
 				return res.status(404).json({ message: "An Error Occurred!" });
 			}

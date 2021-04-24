@@ -25,7 +25,12 @@ router.post("/:productId", async (req, res) => {
 			if (updatedDocument) {
 				return res
 					.status(201)
-					.json({ message: "Product Added to Cart", item: updatedDocument });
+					.json({
+						message: foundProduct.cartListed
+							? "Product removed from Cartlist"
+							: "Product Added to Cartlist",
+						item: updatedDocument,
+					});
 			}
 			return res.status(404).json({ message: "An Error Occurred!" });
 		})
