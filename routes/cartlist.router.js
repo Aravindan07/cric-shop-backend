@@ -23,7 +23,9 @@ router.post("/:productId", async (req, res) => {
 	Product.findOneAndUpdate(query, update, options)
 		.then((updatedDocument) => {
 			if (updatedDocument) {
-				return res.status(201).json(updatedDocument);
+				return res
+					.status(201)
+					.json({ message: "Product Added to Cart", item: updatedDocument });
 			}
 			return res.status(404).json({ message: "An Error Occurred!" });
 		})
