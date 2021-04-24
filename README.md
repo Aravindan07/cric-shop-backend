@@ -10,3 +10,5 @@ The List of **API'S** are as follows,
 -   Add to Wishlist API.
 -   Remove from Wishlist.
 -   Remove from cartlist.
+-   Add Categories
+-   List categories
