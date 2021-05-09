@@ -26,7 +26,7 @@ const removeItemFromWishlist = async (req, res, next) => {
 	try {
 		const item = await Wishlist.findById(id);
 		await item.remove();
-		res.status(201).json({ message: "Item Removed from Wishlist" });
+		res.status(201).json({ message: "Item Removed from Wishlist", item });
 	} catch (error) {
 		next(error);
 	}
