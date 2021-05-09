@@ -14,7 +14,7 @@ const addItemToWishlist = async (req, res, next) => {
 	const { product } = req.body;
 	try {
 		const addItemToWishlist = new Wishlist({ product });
-		const savedItem = await addItemToWishlist.save();
+		const savedItem = await (await addItemToWishlist.save()).populate("product").execPopulate();
 		res.status(201).json({ message: "Item Added to Wishlist", item: savedItem });
 	} catch (error) {
 		next(error);
