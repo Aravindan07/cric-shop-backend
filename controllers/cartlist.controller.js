@@ -25,7 +25,7 @@ const removeFromCartlist = async (req, res, next) => {
 	try {
 		const item = await Cartlist.findById(id);
 		await item.remove();
-		res.status(201).json({ message: "Item Removed from Cartlist" });
+		res.status(201).json({ message: "Item Removed from Cartlist", item: item });
 	} catch (error) {
 		next(error);
 	}
