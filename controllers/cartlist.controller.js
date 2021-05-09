@@ -13,7 +13,7 @@ const addItemToCartlist = async (req, res, next) => {
 	const { product } = req.body;
 	try {
 		const addItemToCartlist = new Cartlist({ product });
-		const savedItem = await addItemToCartlist.save();
+		const savedItem = await (await addItemToCartlist.save()).populate("product").execPopulate();
 		res.status(201).json({ message: "Item Added to Cartlist", item: savedItem });
 	} catch (error) {
 		next(error);
