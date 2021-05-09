@@ -19,7 +19,17 @@ app.use("/api/v1/products", products);
 app.use("/api/v1/wishlist", wishList);
 app.use("/api/v1/cartlist", cartList);
 app.use("/api/v1/categories", categoryList);
-app.use("/api/v1/cartlist/:productId/quantity", quantityUpdater);
+app.use("/api/v1/cartlist/:cartId/quantity", quantityUpdater);
+
+// Error Handler
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(500).json({
+		success: false,
+		message: "An error occurred, see the errorMessage key for more details",
+		errorMessage: err.message,
+	});
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
