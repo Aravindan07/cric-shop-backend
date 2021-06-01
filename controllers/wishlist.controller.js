@@ -1,8 +1,10 @@
-const Wishlist = require("../model/wishlist.model");
+const Wishlist = require("../models/wishlist.model");
+const User = require("../models/user.model");
 
 const getWishlist = async (req, res) => {
+	const { userId } = req.params;
 	try {
-		const wishlist = await Wishlist.find({}).populate("product").select("-__v");
+		const wishlist = await Wishlist.findOne({ userId }).populate("products").select("-__v");
 		res.status(200).json({ items: wishlist });
 	} catch (error) {
 		console.error(error);
@@ -11,10 +13,23 @@ const getWishlist = async (req, res) => {
 };
 
 const addItemToWishlist = async (req, res, next) => {
-	const { product } = req.body;
+	const { userId, product } = req.body;
+	const foundUserWishlist = await Wishlist.findOne({ userId });
+	const foundUserData = await User.findById(userId);
 	try {
-		const addItemToWishlist = new Wishlist({ product });
-		const savedItem = await (await addItemToWishlist.save()).populate("product").execPopulate();
+		if (foundUserWishlist) {
+			foundUserWishlist.products.push(product);
+			const newList = await (await foundUserWishlist.save())
+				.populate("products")
+				.execPopulate();
+			return res.status(201).json({ message: "Item Added to Wishlist", item: newList });
+		}
+		const addItemToWishlist = new Wishlist({ userId, products: [product] });
+		foundUserData.wishList = addItemToWishlist;
+		await foundUserData.save();
+		const savedItem = await (await addItemToWishlist.save())
+			.populate("products")
+			.execPopulate();
 		res.status(201).json({ message: "Item Added to Wishlist", item: savedItem });
 	} catch (error) {
 		next(error);
@@ -22,11 +37,12 @@ const addItemToWishlist = async (req, res, next) => {
 };
 
 const removeItemFromWishlist = async (req, res, next) => {
-	const { id } = req.body;
+	const { userId, productId } = req.body;
 	try {
-		const item = await Wishlist.findById(id);
-		await item.remove();
-		res.status(201).json({ message: "Item Removed from Wishlist", item });
+		const item = await Wishlist.findOne({ userId });
+		item.products = item.products.filter((product) => String(product) !== String(productId));
+		const newList = await (await item.save()).populate("products").execPopulate();
+		res.status(201).json({ message: "Item Removed from Wishlist", item: newList });
 	} catch (error) {
 		next(error);
 	}

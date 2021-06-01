@@ -1,19 +1,27 @@
-const Cartlist = require("../model/cart.model");
+const Cartlist = require("../models/cart.model");
 
 const updateQuantityInCart = async (req, res, next) => {
-	const { id } = req.body;
+	const { cartId, productsId } = req.body;
 	const queryParams = req.query.type;
 	try {
-		const updateQuantity = await Cartlist.findById(id).select("-__v");
+		const updateQuantity = await Cartlist.findById(cartId).select("-__v");
 		if (queryParams === "increment") {
-			updateQuantity.quantity = updateQuantity.quantity + 1;
-			const updatedQuantity = await updateQuantity.save();
+			updateQuantity.products.map((item) =>
+				String(item._id) === String(productsId) ? (item.quantity = item.quantity + 1) : item
+			);
+			const updatedQuantity = await (await updateQuantity.save())
+				.populate("products.product")
+				.execPopulate();
 			return res
 				.status(201)
 				.json({ message: "Quantity updated Successfully", item: updatedQuantity });
 		}
-		updateQuantity.quantity = updateQuantity.quantity - 1;
-		const updatedQuantity = await updateQuantity.save();
+		updateQuantity.products.map((item) =>
+			String(item._id) === String(productsId) ? (item.quantity = item.quantity - 1) : item
+		);
+		const updatedQuantity = await (await updateQuantity.save())
+			.populate("products.product")
+			.execPopulate();
 		return res
 			.status(201)
 			.json({ message: "Quantity updated Successfully", item: updatedQuantity });

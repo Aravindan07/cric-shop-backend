@@ -5,11 +5,12 @@ const {
 	addItemToWishlist,
 	removeItemFromWishlist,
 } = require("../controllers/wishlist.controller");
+const checkAuth = require("../middlewares/checkAuth");
 
-router.route("/").get(getWishlist);
+router.route("/:userId/wishlist").all(checkAuth).get(getWishlist);
 
-router.route("/:productId").post(addItemToWishlist);
+router.route("/:userId/wishlist").all(checkAuth).post(addItemToWishlist);
 
-router.route("/:wishlistId/remove").put(removeItemFromWishlist);
+router.route("/:userId/wishlist/remove").all(checkAuth).put(removeItemFromWishlist);
 
 module.exports = router;
