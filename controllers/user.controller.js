@@ -64,6 +64,11 @@ const userLogin = async (req, res) => {
 	if (!email || !password) {
 		return res.status(400).json({ message: "Please enter all fields" });
 	}
+
+	const checkValidation = validator.validate(email);
+	if (checkValidation === false) {
+		return res.status(400).json({ message: "Entered email is not in the valid format" });
+	}
 	try {
 		const user = await User.findOne({ email })
 			.select("-__v")
@@ -83,7 +88,7 @@ const userLogin = async (req, res) => {
 
 		// Validate password
 		const checkPassword = await bcrypt.compare(password, user.password);
-		if (checkPassword.isMatch === false) {
+		if (!checkPassword) {
 			return res.status(400).json({ message: "Invalid Credentials!" });
 		}
 		const JwtSecretKey = process.env.JWTSECRET;
