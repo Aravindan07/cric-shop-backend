@@ -9,6 +9,7 @@ const wishList = require("./routes/wishlist.router");
 const cartList = require("./routes/cartlist.router");
 const categoryList = require("./routes/categories.router");
 const quantityUpdater = require("./routes/quantity.router");
+const paymentRoutes = require("./routes/payment.router");
 const userRoutes = require("./routes/user.router");
 
 app.use(cors());
@@ -22,6 +23,7 @@ app.use("/api/v1/users", wishList);
 app.use("/api/v1/users", cartList);
 app.use("/api/v1/categories", categoryList);
 app.use("/api/v1/users/:userId/cartlist/:cartId/quantity", quantityUpdater);
+app.use("/api/v1/payment", paymentRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {
