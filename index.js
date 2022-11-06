@@ -14,6 +14,7 @@ const userRoutes = require("./routes/user.router");
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname + "/public"));
 
 connectDB();
 
@@ -27,15 +28,15 @@ app.use("/api/v1/payment", paymentRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {
-	console.error(err.stack);
-	res.status(500).json({
-		success: false,
-		message: "An error occurred, see the errorMessage key for more details",
-		errorMessage: err.message,
-	});
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "An error occurred, see the errorMessage key for more details",
+    errorMessage: err.message,
+  });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
-	console.log(`Server started on ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(`Server started on ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
